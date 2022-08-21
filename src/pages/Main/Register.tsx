@@ -1,42 +1,17 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import AuthTemplate from '../../components/auth/AuthTemplate';
+import AuthForm from '../../components/auth/AuthForm';
 
-export interface IUserInfo {
-  email: string;
-  password: string;
-}
-
-function Register() {
-  const [submitInfo, setSubmitInfo] = useState<IUserInfo>({
-    email: '',
-    password: '',
-  });
-
-  const getInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let { name, value } = e.target;
-    setSubmitInfo({ ...submitInfo, [name]: value });
-  };
-
+function Register({
+  setAuthType,
+}: {
+  setAuthType: React.Dispatch<React.SetStateAction<string>>;
+}) {
   return (
-    <RegisterSection>
-      <RegisterTitle>회원가입</RegisterTitle>
-      <IdInput type="text" name="email" onChange={e => {}} />
-      <PasswordInput type="password" name="password" onChange={e => {}} />
-      <SubmitButton id="signup" onClick={e => {}}>
-        등록
-      </SubmitButton>
-    </RegisterSection>
+    <AuthTemplate>
+      <AuthForm type="register" setAuthType={setAuthType} />
+    </AuthTemplate>
   );
 }
 
 export default Register;
-
-const RegisterSection = styled.section``;
-
-const RegisterTitle = styled.div``;
-
-const IdInput = styled.input``;
-
-const PasswordInput = styled.input``;
-
-const SubmitButton = styled.button``;
