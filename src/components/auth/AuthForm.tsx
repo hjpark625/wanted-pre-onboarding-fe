@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import palette from '../../styles/palette';
+import API from '../../config';
 
 interface TextMap {
   login: string;
@@ -13,11 +15,11 @@ interface AuthFormProps {
 interface UserInfo {
   email: string;
   password: string;
-  passwordConfirm?: string;
 }
 interface ButtonStyledProps {
   fullWidth: boolean | null;
   cyan: boolean | null;
+  disabled?: boolean | null;
 }
 
 const textMap: TextMap = {
@@ -26,63 +28,101 @@ const textMap: TextMap = {
 };
 
 function AuthForm({ type, setAuthType }: AuthFormProps) {
-  const [UserInfo, setUserInfo] = useState<UserInfo>({
+  const [userInfo, setUserInfo] = useState<UserInfo>({
     email: '',
     password: '',
-    passwordConfirm: '',
   });
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const text = textMap[type];
 
   const handleChangeUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
-    setUserInfo({ ...UserInfo, [name]: value });
+    setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (type === 'register') {
+      await fetch(API.SIGN_UP, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: userInfo.email,
+          password: userInfo.password,
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          localStorage.setItem('access_token', data.access_token);
+          alert('회원가입 성공!');
+        })
+        .catch(err => console.error(err));
+    } else if (type === 'login') {
+      await fetch(API.SIGN_IN, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: userInfo.email,
+          password: userInfo.password,
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          localStorage.setItem('access_token', data.access_token);
+          navigate('/todo');
+        })
+        .catch(err => console.error(err));
+    }
   };
 
-  // useEffect(() => {
-  //   if (UserInfo.email.includes('@')) {
-  //     setError('이메일 형식이 아닙니다.');
-  //   }
-  // }, [UserInfo]);
+  useEffect(() => {
+    if (!userInfo.email && !userInfo.password) {
+      setError('정보를 입력해주세요');
+    } else if (!userInfo.email.includes('@' && '.com')) {
+      setError('이메일 형식이 아닙니다.');
+    } else if (userInfo.password.length < 8) {
+      setError('비밀번호는 8자 이상입력해주세요');
+    } else {
+      setError(null);
+    }
+  }, [error, userInfo.email, userInfo.password]);
+
+  useEffect(() => {});
 
   return (
     <AuthFormWrapper>
       <h3>{text}</h3>
-      <form>
+      <form
+        onSubmit={e => {
+          handleSubmit(e);
+        }}
+      >
         <StyledInput
           autoComplete="email"
           name="email"
-          placeholder="아이디"
+          placeholder="이메일을 입력해주세요"
           onChange={handleChangeUserInfo}
         />
         <StyledInput
           autoComplete="new-password"
           name="password"
-          placeholder="비밀번호"
+          placeholder="비밀번호를 입력해주세요"
           type="password"
           onChange={handleChangeUserInfo}
         />
-        {type === 'register' && (
-          <StyledInput
-            autoComplete="new-password"
-            name="passwordConfirm"
-            placeholder="비밀번호 확인"
-            type="password"
-            onChange={handleChangeUserInfo}
-          />
-        )}
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <SubmitButton
           cyan
           fullWidth
-          onSubmit={e => {
-            handleSubmit(e);
-          }}
+          disabled={
+            userInfo.email.includes('@' && '.com') &&
+            userInfo.password.length > 7
+              ? false
+              : true
+          }
         >
           {text}
         </SubmitButton>
@@ -193,6 +233,16 @@ const SubmitButton = styled.button<ButtonStyledProps>`
       background: ${palette.cyan[5]};
       &:hover {
         background: ${palette.cyan[4]};
+      }
+    `}
+
+    ${props =>
+    props.disabled &&
+    css`
+      background: gray;
+      cursor: not-allowed;
+      &:hover {
+        background: gray;
       }
     `}
 `;

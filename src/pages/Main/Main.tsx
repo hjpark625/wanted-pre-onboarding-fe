@@ -4,6 +4,7 @@ import Register from './Register';
 
 function Main() {
   const [authType, setAuthType] = useState('login');
+
   return (
     <div>
       {authType === 'login' ? (
