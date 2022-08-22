@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import palette from './palette';
 import reset from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
@@ -14,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   html {
+    background: ${palette.gray[2]};
     height: 100%;
   }
 

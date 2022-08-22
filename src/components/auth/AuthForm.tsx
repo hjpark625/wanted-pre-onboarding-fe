@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import axios from 'axios';
 import palette from '../../styles/palette';
 import API from '../../config';
 
@@ -46,32 +47,31 @@ function AuthForm({ type, setAuthType }: AuthFormProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (type === 'register') {
-      await fetch(API.SIGN_UP, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: userInfo.email,
-          password: userInfo.password,
-        }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          localStorage.setItem('access_token', data.access_token);
+      await axios
+        .post(
+          API.SIGN_UP,
+          {
+            email: userInfo.email,
+            password: userInfo.password,
+          },
+          { headers: { 'Content-Type': 'application/json' } }
+        )
+        .then(res => {
           alert('회원가입 성공!');
         })
         .catch(err => console.error(err));
     } else if (type === 'login') {
-      await fetch(API.SIGN_IN, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: userInfo.email,
-          password: userInfo.password,
-        }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          localStorage.setItem('access_token', data.access_token);
+      await axios
+        .post(
+          API.SIGN_IN,
+          {
+            email: userInfo.email,
+            password: userInfo.password,
+          },
+          { headers: { 'Content-Type': 'application/json' } }
+        )
+        .then(res => {
+          localStorage.setItem('access_token', res.data.access_token);
           navigate('/todo');
         })
         .catch(err => console.error(err));
@@ -239,10 +239,10 @@ const SubmitButton = styled.button<ButtonStyledProps>`
     ${props =>
     props.disabled &&
     css`
-      background: gray;
+      background: lightgray;
       cursor: not-allowed;
       &:hover {
-        background: gray;
+        background: lightgray;
       }
     `}
 `;

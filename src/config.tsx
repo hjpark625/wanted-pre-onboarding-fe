@@ -5,7 +5,7 @@ const API = {
   SIGN_UP: `${URI}/auth/signup`,
   SIGN_IN: `${URI}/auth/signin`,
   CREATE_GET_TODO: `${URI}/todos`,
-  UPDATE_DELETE_TODO: `${URI}/todos/:id`,
+  UPDATE_DELETE_TODO: `${URI}/todos`,
 };
 
 export default API;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import palette from '../../styles/palette';
 
 function AuthTemplate({ children }: { children: React.ReactElement }) {
   return (
@@ -24,7 +23,6 @@ const AuthTemplateWrapper = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
-  background: ${palette.gray[2]};
   display: flex;
   flex-direction: column;
   justify-content: center;
