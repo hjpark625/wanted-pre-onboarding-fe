@@ -90,8 +90,6 @@ function AuthForm({ type, setAuthType }: AuthFormProps) {
     }
   }, [error, userInfo.email, userInfo.password]);
 
-  useEffect(() => {});
-
   return (
     <AuthFormWrapper>
       <h3>{text}</h3>
@@ -239,10 +237,10 @@ const SubmitButton = styled.button<ButtonStyledProps>`
     ${props =>
     props.disabled &&
     css`
-      background: lightgray;
+      background: ${palette.gray[4]};
       cursor: not-allowed;
       &:hover {
-        background: lightgray;
+        background: ${palette.gray[4]};
       }
     `}
 `;

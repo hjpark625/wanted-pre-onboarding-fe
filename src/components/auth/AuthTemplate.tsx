@@ -1,14 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 function AuthTemplate({ children }: { children: React.ReactElement }) {
   return (
     <AuthTemplateWrapper>
       <WhiteBox>
-        <div className="logo-area">
-          <Link to="/">WELCOME</Link>
-        </div>
+        <LogoArea>
+          <span>WELCOME to Todo APP</span>
+        </LogoArea>
         {children}
       </WhiteBox>
     </AuthTemplateWrapper>
@@ -29,14 +28,15 @@ const AuthTemplateWrapper = styled.div`
   align-items: center;
 `;
 
+const LogoArea = styled.div`
+  display: block;
+  padding-bottom: 2rem;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 2px;
+`;
+
 const WhiteBox = styled.div`
-  .logo-area {
-    display: block;
-    padding-bottom: 2rem;
-    text-align: center;
-    font-weight: bold;
-    letter-spacing: 2px;
-  }
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   padding: 2rem;
   width: 360px;

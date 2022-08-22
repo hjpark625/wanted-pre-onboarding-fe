@@ -219,10 +219,11 @@ const EditInput = styled.input`
   height: 2rem;
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid blue;
+  border-bottom: 2px solid ${palette.gray[5]};
   padding: 0.5rem;
   padding-left: 0;
   font-size: 1rem;
+  color: ${palette.gray[6]};
   &:focus {
     outline: none;
   }
