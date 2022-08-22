@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TodoTemplate from '../../components/Todos/TodoTemplate';
 import TodoInsert from '../../components/Todos/TodoInsert';
@@ -7,8 +8,13 @@ import API from '../../config';
 
 function Todo() {
   const [todos, setTodos] = useState([]);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('access_token');
+
+  const checkToken = () => {
+    !token && navigate('/');
+  };
 
   useEffect(() => {
     axios
@@ -20,6 +26,11 @@ function Todo() {
       })
       .catch(err => console.error(err));
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    checkToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

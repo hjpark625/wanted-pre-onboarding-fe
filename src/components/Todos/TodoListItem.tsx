@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import { ITodos } from './TodoList';
+import palette from '../../styles/palette';
 import API from '../../config';
 
 interface TodoProps {
@@ -101,7 +102,7 @@ const TodoListItemWrapper = styled.div`
   }
 
   & + & {
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid ${palette.gray[3]};
   }
 `;
 
@@ -120,7 +121,7 @@ const Text = styled.div<StyleProps>`
   margin-left: 0.5rem;
   flex: 1;
 
-  color: ${({ isCompleted }) => (!isCompleted ? '#000000' : '#adb5bd')};
+  color: ${({ isCompleted }) => (!isCompleted ? 'inherit' : '#adb5bd')};
   text-decoration: ${({ isCompleted }) =>
     !isCompleted ? 'none' : 'line-through'};
 `;
