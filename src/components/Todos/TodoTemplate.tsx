@@ -37,8 +37,7 @@ const AppTitle = styled.div`
 
 const Content = styled.div`
   background: white;
-  max-height: 30rem;
-  height: 100%;
+  height: 22rem;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;

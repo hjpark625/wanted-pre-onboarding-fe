@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import { ITodos } from './TodoList';
 import palette from '../../styles/palette';
 import API from '../../config';
@@ -20,6 +20,10 @@ interface StyleProps {
 function TodoListItem({ items, setTodos }: TodoProps) {
   const { todo, isCompleted, id } = items;
   const [isDone, setIsDone] = useState(isCompleted);
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [editTodo, setEditTodo] = useState(todo);
+
   const token = localStorage.getItem('access_token');
 
   const getDoneTodo = async () => {
@@ -64,6 +68,39 @@ function TodoListItem({ items, setTodos }: TodoProps) {
       .catch(err => console.error(err));
   };
 
+  const saveEditTodoText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditTodo(e.target.value);
+  };
+
+  const editSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await axios
+      .put(
+        `${API.UPDATE_DELETE_TODO}/${id}`,
+        { todo: editTodo, isCompleted },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then(res => {
+        alert('수정 완료했습니다!');
+        setIsEdit(false);
+      })
+      .catch(err => console.error(err));
+
+    axios
+      .get(API.CREATE_GET_TODO, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(res => {
+        setTodos(res.data);
+      })
+      .catch(err => console.error(err));
+  };
+
   return (
     <TodoListItemWrapper>
       <CheckBox
@@ -77,9 +114,31 @@ function TodoListItem({ items, setTodos }: TodoProps) {
         ) : (
           <FontAwesomeIcon icon={faSquare} />
         )}
-
-        <Text isCompleted={isCompleted}>{todo}</Text>
+        {isEdit || <Text isCompleted={isCompleted}>{todo}</Text>}
       </CheckBox>
+      {isEdit && (
+        <EditForm
+          onSubmit={e => {
+            editSubmit(e);
+          }}
+        >
+          <EditInput
+            type="text"
+            value={editTodo}
+            onChange={e => {
+              saveEditTodoText(e);
+            }}
+          />
+        </EditForm>
+      )}
+      <Edit
+        isCompleted={isCompleted}
+        onClick={() => {
+          setIsEdit(prev => !prev);
+        }}
+      >
+        <FontAwesomeIcon icon={faPen} />
+      </Edit>
       <Remove
         onClick={() => {
           deleteTodo();
@@ -97,6 +156,7 @@ const TodoListItemWrapper = styled.div`
   padding: 1rem;
   display: flex;
   align-items: center;
+  position: relative;
   &:nth-child(even) {
     background: #f8f9fa;
   }
@@ -134,5 +194,36 @@ const Remove = styled.div`
   cursor: pointer;
   &:hover {
     color: #ff8787;
+  }
+`;
+
+const Edit = styled.div<StyleProps>`
+  display: ${({ isCompleted }) => (isCompleted ? 'none' : 'flex')};
+  margin-right: 1.5rem;
+  align-items: center;
+  font-size: 1.2rem;
+  color: ${palette.gray[6]};
+  cursor: pointer;
+  &:hover {
+    color: ${palette.gray[4]};
+  }
+`;
+
+const EditForm = styled.form`
+  position: absolute;
+  left: 9%;
+`;
+
+const EditInput = styled.input`
+  width: 24rem;
+  height: 2rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid blue;
+  padding: 0.5rem;
+  padding-left: 0;
+  font-size: 1rem;
+  &:focus {
+    outline: none;
   }
 `;

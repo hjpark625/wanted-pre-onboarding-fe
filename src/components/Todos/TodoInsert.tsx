@@ -71,6 +71,7 @@ const TodoInsertForm = styled.form`
   background: #495057;
   position: sticky;
   top: 0;
+  z-index: 2;
 `;
 
 const TodoInput = styled.input`
