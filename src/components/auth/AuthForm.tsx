@@ -216,8 +216,8 @@ const SubmitButton = styled.button<ButtonStyledProps>`
     background: ${palette.gray[6]};
   }
 
-  ${props =>
-    props.fullWidth &&
+  ${({ fullWidth }) =>
+    fullWidth &&
     css`
       padding-top: 0.75rem;
       padding-bottom: 0.75rem;
@@ -225,8 +225,8 @@ const SubmitButton = styled.button<ButtonStyledProps>`
       font-size: 1.125rem;
     `}
 
-  ${props =>
-    props.cyan &&
+  ${({ cyan }) =>
+    cyan &&
     css`
       background: ${palette.cyan[5]};
       &:hover {
@@ -234,8 +234,8 @@ const SubmitButton = styled.button<ButtonStyledProps>`
       }
     `}
 
-    ${props =>
-    props.disabled &&
+    ${({ disabled }) =>
+    disabled &&
     css`
       background: ${palette.gray[4]};
       cursor: not-allowed;
