@@ -24,6 +24,7 @@
 ### 1️⃣ 로그인 및 회원가입 페이지
 
 1. 로그인 및 회원가입 영상
+
    ![로그인 회원가입(gif)](https://user-images.githubusercontent.com/97019802/186090073-14c5e5d3-d6fe-4d91-8150-9edfe5a7f690.gif)
 
 2. 토큰 유무에 따른 리다이렉트 시연영상
@@ -33,6 +34,7 @@
 ### 2️⃣ Todo 만들기
 
 1. Todo CRUD 시연영상
+
    ![Todo CRUD(gif)](https://user-images.githubusercontent.com/97019802/186090087-8a21604b-093e-4593-9c97-d5f9b42b57de.gif)
 
 ---
